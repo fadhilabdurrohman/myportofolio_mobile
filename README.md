@@ -40,11 +40,13 @@ Aplikasi portofolio mobile yang dikembangkan dengan Flutter untuk memenuhi Tutor
 - `Scaffold`: menyediakan struktur dasar halaman.
 - `AppBar`: menampilkan bilah judul di bagian atas.
 - `Padding`: memberikan ruang di sekeliling widget anak.
-- `Column`: menyusun widget secara vertikal.
+- `Column`: menyusun widget secara vertikal, termasuk susunan kartu identitas.
+- `Row`: menyusun label dan nilai identitas secara horizontal.
 - `Container`: mengatur padding, ukuran, warna, dan border.
 - `Image` melalui `Image.asset()`: menampilkan foto dari aset proyek.
-- `Table`: menyusun identitas dalam baris dan kolom.
-- `SizedBox`: memberikan jarak atau ukuran tertentu.
+- `SizedBox`: memberikan jarak antarwidget dan menetapkan lebar label agar nilai identitas sejajar.
+- `Card`: menyediakan tampilan kartu identitas dengan efek bayangan.
+- `InfoCard`: menampilkan satu kartu identitas yang berisi label dan nilainya.
 - `Center`: menempatkan widget anak di tengah.
 - `Text`: menampilkan teks.
 - `GridView` melalui `GridView.count()`: menyusun menu dalam kisi tiga kolom.

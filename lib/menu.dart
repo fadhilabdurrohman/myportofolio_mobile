@@ -8,7 +8,7 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP B";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder, Colors.yellow.shade700),
+    ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700),
     ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
@@ -48,35 +48,12 @@ class MyHomePage extends StatelessWidget {
 
             Container(
               padding: const EdgeInsets.all(16),
-              child:   Container(
-                color: Colors.blue.shade700,
-                child: Table(
-                  border: TableBorder.all(),
-                  columnWidths: const {
-                    0: FixedColumnWidth(80),
-                    1: FlexColumnWidth(),
-                  },
-                  children: [
-                    TableRow(
-                      children: [
-                        cell('NPM', true),
-                        cell(npm, false),
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        cell('Nama', true),
-                        cell(nama, false),
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        cell('Kelas', true),
-                        cell(kelas, false),
-                      ]
-                    ),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  InfoCard(title: 'NPM', content: npm),
+                  InfoCard(title: 'Name', content: nama),
+                  InfoCard(title: 'Class', content: kelas),
+                ],
               ),
             ),
 
@@ -118,19 +95,42 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+}
 
-  // Fungsi pembantu untuk tabel pada data identitas
-  Widget cell(String text, bool isHeader) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      color: isHeader ? Colors.indigo.shade700 : Colors.indigo.shade300,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal, 
+class InfoCard extends StatelessWidget {
+  // Kartu informasi yang menampilkan judul (title) dan isi (content).
+  final String title;
+  final String content;
+
+  const InfoCard({super.key, required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      // Memberikan efek bayangan kartu elevasi 2 unit.
+      elevation: 2.0,
+      child: Container(
+        // Menyesuaikan lebar kartu dengan proporsi layar (dibagi 3.5).
+        width: double.infinity,
+        padding: const EdgeInsets.all(8.0),
+        // Menyusun teks title dan content secara vertikal.
+        child: Row(
+          children: [
+            SizedBox(
+              width: 70,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8.0, width: 20.0),
+            Text(content),
+          ],
         ),
-      )
+      ),
     );
   }
 }
