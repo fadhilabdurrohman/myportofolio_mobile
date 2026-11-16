@@ -8,9 +8,9 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP B";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder, Colors.red.shade700),
+    ItemHomepage("Lihat Proyek", Icons.folder, Colors.yellow.shade700),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700),
-    ItemHomepage("Logout", Icons.logout, Colors.blue.shade700),
+    ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
 
   @override
@@ -31,14 +31,38 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Baris horizontal untuk menampilkan 3 InfoCard secara sejajar.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Name', content: nama),
-                InfoCard(title: 'Class', content: kelas),
-              ],
+            Container(
+              padding: const EdgeInsets.all(16),
+              child:   Container(
+                color: Colors.blue.shade700,
+                child: Table(
+                  border: TableBorder.all(),
+                  columnWidths: const {
+                    0: FixedColumnWidth(80),
+                    1: FlexColumnWidth(),
+                  },
+                  children: [
+                    TableRow(
+                      children: [
+                        cell('NPM', true),
+                        cell(npm, false),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        cell('Nama', true),
+                        cell(nama, false),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        cell('Kelas', true),
+                        cell(kelas, false),
+                      ]
+                    ),
+                  ],
+                ),
+              ),
             ),
 
             const SizedBox(height: 16.0),
@@ -77,6 +101,21 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  // Fungsi pembantu untuk tabel pada data identitas
+  Widget cell(String text, bool isHeader) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      color: isHeader ? Colors.indigo.shade700 : Colors.indigo.shade300,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal, 
+        ),
+      )
     );
   }
 }
