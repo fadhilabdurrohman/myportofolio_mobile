@@ -32,6 +32,21 @@ class MyHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 2,
+                ),
+              ),
+              child: Image.asset(
+                'assets/me.jpeg',
+                width: 160,
+                height: 160,
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            Container(
               padding: const EdgeInsets.all(16),
               child:   Container(
                 color: Colors.blue.shade700,
