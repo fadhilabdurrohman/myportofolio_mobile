@@ -4,7 +4,7 @@
 
 > 1. Jelaskan apa yang dimaksud dengan widget tree pada Flutter dan bagaimana hubungan induk-anak (parent-child) bekerja antar-widget!
 
-1. *Widget tree* adalah susunan widget berbentuk hierarki yang membentuk antarmuka aplikasi. Widget induk (*parent*) menampung dan mengatur tata letak widget anak (*child*). Pada proyek ini, `Padding` membungkus `Column`, kemudian `Column` menampung gambar, tabel identitas, dan bagian menu. Properti `child` menerima satu widget, sedangkan `children` menerima beberapa widget.
+1. *Widget tree* adalah susunan widget berbentuk hierarki yang membentuk antarmuka aplikasi. Widget induk (*parent*) menampung dan mengatur tata letak widget anak (*child*). Pada proyek ini, `Padding` membungkus `Column`, kemudian `Column` menampung gambar, dan bagian menu. Properti `child` menerima satu widget, sedangkan `children` menerima beberapa widget.
 
 > 2. Sebutkan semua widget yang kamu gunakan dalam proyek ini dan jelaskan fungsinya masing-masing!
 
@@ -18,7 +18,6 @@
 - `Column`: menyusun widget secara vertikal.
 - `Container`: mengatur padding, ukuran, warna, dan border.
 - `Image` melalui `Image.asset()`: menampilkan foto dari aset proyek.
-- `Table`: menyusun identitas dalam baris dan kolom.
 - `SizedBox`: memberikan jarak atau ukuran tertentu.
 - `Center`: menempatkan widget anak di tengah.
 - `Text`: menampilkan teks.
@@ -56,17 +55,15 @@ Pengerjaan tugas ini dibantu dengan Gen AI (ChatGPT) untuk memahami konsep Flutt
 ### Penggunaan AI
 
 - Membantu memahami konsep widget tree, MaterialApp, StatelessWidget, StatefulWidget, BuildContext, serta hot reload dan hot restart.
-- Membantu memahami cara membuat tabel.
 - Membantu pengaturan padding, border, serta warna header dan isi tabel.
 - Membantu dalam menambahkan gambar.
-- menyusun jawaban pertanyaan reflektif.
+- Membantu menyusun jawaban pertanyaan reflektif.
 
 ### Perbaikan Manual
 
 - Mengganti kartu identitas menjadi tabel berisi NPM, nama, dan kelas.
-- Mengimplementasikan tabel pada identitas.
 - Menambahkan foto profil beserta ukuran, border, dan pengaturan `BoxFit.cover`.
-- Mengubah warna tombol menu menjadi kuning untuk Lihat Proyek, hijau untuk Tambah Proyek, dan merah untuk Logout.
+- Mengubah warna tombol menu menjadi biru untuk Lihat Proyek, hijau untuk Tambah Proyek, dan merah untuk Logout.
 
 ### Referensi
 
