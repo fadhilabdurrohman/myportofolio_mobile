@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+
+class ExperienceFormPage extends StatefulWidget {
+  const ExperienceFormPage({super.key});
+
+  @override
+  State<ExperienceFormPage> createState() => _ExperienceFormPageState();
+}
+
+class _ExperienceFormPageState extends State<ExperienceFormPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  String _title = "";
+  String _organization = "";
+  String _description = "";
+  String _category = "Full-Time";
+
+  final List<String> _categories = [
+    'Internship',
+    'Research',
+    'Volunteer',
+    'Part-Time',
+    'Full-Time',
+    'Freelance',
+  ];
+
+  String _cleanText(String value) {
+    return value.replaceAll(RegExp(r'</?[A-Za-z][^>]*>'), '').trim();
+  }
+
+  String? _validateText(String? value, String label, {int? maxLength}) {
+    final text = (value ?? '').trim();
+
+    if (_cleanText(text).isEmpty) return "$label wajib diisi.";
+
+    if (maxLength != null && text.runes.length > maxLength) {
+      return "$label maksimal $maxLength karaketer.";
+    }
+
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text(
+            'Add Experience Form',
+          ),
+        ),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+      ),
+
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Nama experience
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Nama Experience",
+                    labelText: "Nama Experience",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _title = value;
+                  },
+                  validator: (value) => _validateText(
+                    value, 
+                    "Nama Expereince",
+                    maxLength: 255,
+                  ),
+                ),
+              ),
+
+              // Organization exp
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Nama organisasi",
+                    labelText: "Nama organisasi",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _organization = value;
+                  },
+                  validator: (value) => _validateText(
+                    value, 
+                    "Nama organisasi",
+                    maxLength: 255,
+                  ),
+                ),
+              ),
+
+              // Description exp
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Deskirpsi pengalaman",
+                    labelText: "Deskripsi pengalaman",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _description = value;
+                  },
+                  validator: (value) => _validateText(
+                    value, 
+                    "Deskripsi pengalaman",
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: "Kategori Pengalaman",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  initialValue: _category,
+                  items: _categories
+                      .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          ))
+                      .toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _category = newValue!;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
