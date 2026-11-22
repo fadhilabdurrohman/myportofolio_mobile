@@ -40,6 +40,40 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
     return null;
   }
 
+  // Tampilkan ringkasan yg ditambahkan
+  void _showExperienceSummary() {
+    if (!_formKey.currentState!.validate()) return;
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text("Experience berhasil ditambahkan!"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Nama pengalaman: ${_cleanText(_title)}'),
+                Text('Organisasi: ${_cleanText(_organization)}'),
+                Text('Deskripsi: ${_cleanText(_description)}'),
+                Text('Kategori: $_category'),
+              ]
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+                _formKey.currentState!.reset();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,6 +179,25 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                       _category = newValue!;
                     });
                   },
+                ),
+              ),
+
+              // Tombol simpan
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          WidgetStateProperty.all(Colors.indigo),
+                    ),
+                    onPressed: _showExperienceSummary,
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
                 ),
               ),
             ],
