@@ -141,6 +141,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  maxLines: 5,
                   decoration: InputDecoration(
                     hintText: "Deskirpsi pengalaman",
                     labelText: "Deskripsi pengalaman",
