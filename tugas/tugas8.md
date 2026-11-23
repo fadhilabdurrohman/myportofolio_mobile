@@ -16,7 +16,7 @@
 
 > 4. Apa peran `GlobalKey<FormState>`, `validator`, dan `validate()` saat tombol Simpan ditekan? Berikan satu contoh nilai yang ditolak oleh validasi dan jelaskan mengapa memilih jenis input atau papan ketik saja belum cukup.
 
-4.`GlobalKey<FormState>` memberi akses ke status formulir. Saat tombol **Simpan** ditekan, `validate()` menjalankan `validator` setiap kolom. Misalnya, nama berisi `"   "` ditolak karena kosong setelah `trim()`. Jenis papan ketik hanya memudahkan pengetikan. Aturan wajib isi dan batas panjang tetap perlu diperiksa melalui validasi. 
+4. `GlobalKey<FormState>` memberi akses ke status formulir. Saat tombol **Simpan** ditekan, `validate()` menjalankan `validator` setiap kolom. Misalnya, nama berisi `"   "` ditolak karena kosong setelah `trim()`. Jenis papan ketik hanya memudahkan pengetikan. Aturan wajib isi dan batas panjang tetap perlu diperiksa melalui validasi. 
 
 ### AI Disclosure
 
