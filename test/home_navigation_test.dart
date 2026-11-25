@@ -2,23 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
+import 'package:myportofolio_mobile/screens/login_screen.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/widgets/menu_card.dart';
 
+import 'support/test_api.dart';
+
 Future<void> bukaHome(WidgetTester tester) async {
-  // Gunakan layar yang cukup luas agar semua kartu dapat ditekan.
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = const Size(800, 900);
+
   addTearDown(tester.view.resetDevicePixelRatio);
   addTearDown(tester.view.resetPhysicalSize);
 
-  await tester.pumpWidget(const MyApp());
+  await tester.pumpWidget(MyApp(apiClient: fakeApi()));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tekanKartu(WidgetTester tester, String nama) async {
+  final kartu = find.widgetWithText(ItemCard, nama);
+  await tester.ensureVisible(kartu);
+  await tester.tap(kartu);
   await tester.pumpAndSettle();
 }
 
 Future<void> bukaDrawer(WidgetTester tester) async {
   await tester.tap(find.byType(DrawerButton));
+  await tester.pumpAndSettle();
+}
+
+Future<void> login(WidgetTester tester) async {
+  await isiKolom(tester, 'Username', 'owner');
+  await isiKolom(tester, 'Password', 'test-password');
+
+  await tester.tap(find.widgetWithText(ElevatedButton, 'Masuk'));
   await tester.pumpAndSettle();
 }
 
@@ -37,60 +55,106 @@ void main() {
       'Tambah Proyek',
       'Lihat Pengalaman',
       'Tambah Pengalaman',
-      'Logout',
+      'Login',
     ]) {
       expect(find.widgetWithText(ItemCard, nama), findsOneWidget);
     }
   });
 
-  // Ketiga kartu ini menampilkan SnackBar dan pengguna tetap di Home.
-  for (final nama in ['Lihat Proyek', 'Lihat Pengalaman', 'Logout']) {
-    testWidgets('Kartu $nama menampilkan SnackBar', (tester) async {
+  final daftarPublik = {
+    'Lihat Proyek': 'Belum ada proyek.',
+    'Lihat Pengalaman': 'Belum ada pengalaman.',
+  };
+
+  for (final tujuan in daftarPublik.entries) {
+    testWidgets('${tujuan.key} dapat dibuka tanpa login', (tester) async {
       await bukaHome(tester);
+      await tekanKartu(tester, tujuan.key);
 
-      await tester.tap(find.widgetWithText(ItemCard, nama));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(MyHomePage), findsOneWidget);
-      expect(
-        find.widgetWithText(SnackBar, 'Kamu telah menekan tombol $nama!'),
-        findsOneWidget,
-      );
+      expect(find.text(tujuan.value), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
     });
   }
 
-  // Satu tes untuk setiap pasangan kartu dan halaman tujuan.
-  final tujuanKartu = <String, Type>{
+  testWidgets('Membatalkan login mengembalikan pengguna ke Home', (
+    tester,
+  ) async {
+    await bukaHome(tester);
+    await tekanKartu(tester, 'Tambah Proyek');
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MyHomePage), findsOneWidget);
+    expect(find.byType(ProjectFormPage), findsNothing);
+    expect(find.widgetWithText(ItemCard, 'Login'), findsOneWidget);
+  });
+
+  final formulir = <String, Type>{
     'Tambah Proyek': ProjectFormPage,
     'Tambah Pengalaman': ExperienceFormPage,
   };
 
-  for (final tujuan in tujuanKartu.entries) {
-    testWidgets(
-      'Kartu ${tujuan.key} membuka form dan bisa kembali',
-      (tester) async {
-        await bukaHome(tester);
+  for (final tujuan in formulir.entries) {
+    testWidgets('${tujuan.key} meminta login lalu membuka formulir tujuan', (
+      tester,
+    ) async {
+      await bukaHome(tester);
+      await tekanKartu(tester, tujuan.key);
 
-        final kartu = find.widgetWithText(ItemCard, tujuan.key);
-        await tester.ensureVisible(kartu);
-        await tester.tap(kartu);
-        await tester.pumpAndSettle();
+      expect(find.byType(LoginScreen), findsOneWidget);
 
-        expect(find.byType(tujuan.value), findsOneWidget);
-        expect(
-          find.widgetWithText(
-            SnackBar,
-            'Kamu telah menekan tombol ${tujuan.key}!',
-          ),
-          findsOneWidget,
-        );
+      await login(tester);
 
-        // Simulasikan tombol kembali pada perangkat.
-        await tester.binding.handlePopRoute();
-        await tester.pumpAndSettle();
+      expect(find.byType(tujuan.value), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
 
-        expect(find.byType(MyHomePage), findsOneWidget);
-      },
-    );
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MyHomePage), findsOneWidget);
+      expect(find.widgetWithText(ItemCard, 'Logout'), findsOneWidget);
+    });
   }
+
+  testWidgets('Drawer Add Experience meminta login dan Home kembali ke awal', (
+    tester,
+  ) async {
+    await bukaHome(tester);
+    await bukaDrawer(tester);
+
+    await tester.tap(find.widgetWithText(ListTile, 'Add Experience'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+
+    await login(tester);
+    expect(find.byType(ExperienceFormPage), findsOneWidget);
+
+    await bukaDrawer(tester);
+    await tester.tap(find.widgetWithText(ListTile, 'Home'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MyHomePage), findsOneWidget);
+    expect(find.widgetWithText(ItemCard, 'Logout'), findsOneWidget);
+  });
+
+  testWidgets('Setelah logout, membuka formulir meminta login lagi', (
+    tester,
+  ) async {
+    await bukaHome(tester);
+    await tekanKartu(tester, 'Login');
+    await login(tester);
+
+    expect(find.widgetWithText(ItemCard, 'Logout'), findsOneWidget);
+
+    await tekanKartu(tester, 'Logout');
+    expect(find.widgetWithText(ItemCard, 'Login'), findsOneWidget);
+
+    await tekanKartu(tester, 'Tambah Pengalaman');
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(find.byType(ExperienceFormPage), findsNothing);
+  });
 }

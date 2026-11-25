@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/menu_card.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_state.dart';
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   final String npm = "2506656690";
   final String nama = "Fadhil Abdurrohman";
   final String kelas = "PBP B";
 
-  final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
-    ItemHomepage("Tambah Proyek", Icons.create_new_folder_outlined, Colors.green.shade700),
-    ItemHomepage("Lihat Pengalaman", Icons.work, Colors.yellow.shade700),
-    ItemHomepage("Tambah Pengalaman", Icons.post_add, Colors.deepPurple.shade700),
-    ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final loggedIn = context.watch<AuthState>().isLoggedIn;
+
+    final items = [
+      ItemHomepage('Lihat Proyek', Icons.folder, Colors.blue.shade700),
+      ItemHomepage(
+        'Tambah Proyek',
+        Icons.create_new_folder_outlined,
+        Colors.green.shade700,
+      ),
+      ItemHomepage('Lihat Pengalaman', Icons.work, Colors.orange.shade700),
+      ItemHomepage('Tambah Pengalaman', Icons.post_add, Colors.deepPurple.shade700),
+      ItemHomepage(
+        loggedIn ? 'Logout' : 'Login',
+        loggedIn ? Icons.logout : Icons.login,
+        Colors.red.shade700,
+      ),
+    ];
+
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
       // AppBar menampilkan bar bagian atas halaman aplikasi.
@@ -82,11 +94,12 @@ class MyHomePage extends StatelessWidget {
 
                     // GridView menampilkan kartu tombol dalam tata letak kisi 3 kolom.
                     GridView.count(
-                      primary: true,
+                      primary: false,
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(20),
                       crossAxisSpacing: 10,
-                      childAspectRatio: 4,
                       mainAxisSpacing: 10,
+                      childAspectRatio: 4,
                       crossAxisCount: 2,
                       // shrinkWrap agar ukuran kisi menyesuaikan tinggi konten anak.
                       shrinkWrap: true,
