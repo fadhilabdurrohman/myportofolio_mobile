@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/menu_card.dart';
 import 'package:provider/provider.dart';
+
 import '../services/auth_state.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -23,7 +24,11 @@ class MyHomePage extends StatelessWidget {
         Colors.green.shade700,
       ),
       ItemHomepage('Lihat Pengalaman', Icons.work, Colors.orange.shade700),
-      ItemHomepage('Tambah Pengalaman', Icons.post_add, Colors.deepPurple.shade700),
+      ItemHomepage(
+        'Tambah Pengalaman',
+        Icons.post_add,
+        Colors.deepPurple.shade700,
+      ),
       ItemHomepage(
         loggedIn ? 'Logout' : 'Login',
         loggedIn ? Icons.logout : Icons.login,
@@ -51,10 +56,7 @@ class MyHomePage extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
+                  border: Border.all(color: Colors.black, width: 2),
                 ),
                 child: Image.asset(
                   'assets/me.jpeg',

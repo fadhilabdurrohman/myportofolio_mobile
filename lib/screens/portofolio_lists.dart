@@ -42,7 +42,8 @@ class ExperienceListScreen extends StatelessWidget {
       emptyMessage: 'Belum ada pengalaman.',
       load: (api) => api.getExperiences(),
       name: (e) => e.title,
-      subtitle: (e) => '${e.organization} · ${e.categoryLabel}\n${e.description}',
+      subtitle: (e) =>
+          '${e.organization} · ${e.categoryLabel}\n${e.description}',
       detail: (e) => _DetailPage(
         title: e.title,
         imageUrl: e.thumbnail,
@@ -126,7 +127,10 @@ class _PortfolioListState<T> extends State<_PortfolioList<T>> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text('Daftar gagal dimuat. Periksa koneksi ke Django.'),
-                  TextButton(onPressed: _reload, child: const Text('Coba lagi')),
+                  TextButton(
+                    onPressed: _reload,
+                    child: const Text('Coba lagi'),
+                  ),
                 ],
               ),
             );
@@ -160,7 +164,9 @@ class _PortfolioListState<T> extends State<_PortfolioList<T>> {
                           ),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => widget.detail(row)),
+                            MaterialPageRoute(
+                              builder: (_) => widget.detail(row),
+                            ),
                           ),
                         ),
                       );
@@ -174,11 +180,7 @@ class _PortfolioListState<T> extends State<_PortfolioList<T>> {
 }
 
 class _DetailPage extends StatelessWidget {
-  const _DetailPage({
-    required this.title,
-    required this.fields,
-    this.imageUrl,
-  });
+  const _DetailPage({required this.title, required this.fields, this.imageUrl});
 
   final String title;
   final Map<String, String> fields;

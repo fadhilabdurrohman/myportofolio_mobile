@@ -30,7 +30,6 @@ Future<void> openPortfolioMenu(BuildContext context, String menu) async {
   };
 
   if (!context.mounted) return;
-  await Navigator.of(context).push<void>(
-    MaterialPageRoute(builder: (_) => page),
-  );
+  await Navigator.of(context)
+      .push<void>(MaterialPageRoute(builder: (_) => page));
 }

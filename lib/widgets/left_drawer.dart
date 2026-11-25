@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../services/auth_state.dart';
 import 'portofolio_navigation.dart';
 
@@ -43,7 +44,11 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           tile('Lihat Proyek', Icons.folder, 'Lihat Proyek'),
-          tile('Add Project', Icons.create_new_folder_outlined, 'Tambah Proyek'),
+          tile(
+            'Add Project',
+            Icons.create_new_folder_outlined,
+            'Tambah Proyek',
+          ),
           tile('Lihat Pengalaman', Icons.work, 'Lihat Pengalaman'),
           tile('Add Experience', Icons.post_add, 'Tambah Pengalaman'),
           tile(

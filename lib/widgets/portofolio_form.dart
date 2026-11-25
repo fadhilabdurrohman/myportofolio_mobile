@@ -127,7 +127,9 @@ class _PortfolioFormState extends State<PortfolioForm> {
         _message('Sesi berakhir. Login kembali, lalu tekan Save.');
         await ensureLoggedIn(context);
       } else if (error.statusCode == 403) {
-        _message('Akun ini tidak memiliki izin menambah data. Gunakan superuser.');
+        _message(
+          'Akun ini tidak memiliki izin menambah data. Gunakan superuser.',
+        );
       } else {
         _message(error.toString());
       }
@@ -151,7 +153,10 @@ class _PortfolioFormState extends State<PortfolioForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               for (final field in widget.fields)
-                Padding(padding: const EdgeInsets.only(bottom: 12), child: field),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: field,
+                ),
               ElevatedButton(
                 onPressed: _busy ? null : _submit,
                 child: Text(_busy ? 'Menyimpan...' : 'Save'),

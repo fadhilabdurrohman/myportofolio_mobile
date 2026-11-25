@@ -31,11 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final message = error.statusCode == 400
           ? 'Login gagal (400). Periksa username dan password.'
           : error.toString();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
     } on Exception {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menghubungi Django. Periksa URL dan koneksi.')),
+        const SnackBar(
+          content: Text('Gagal menghubungi Django. Periksa URL dan koneksi.'),
+        ),
       );
     } finally {
       if (mounted) setState(() => _busy = false);

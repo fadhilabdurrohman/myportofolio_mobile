@@ -7,9 +7,8 @@ import '../services/auth_state.dart';
 Future<bool> ensureLoggedIn(BuildContext context) async {
   if (context.read<AuthState>().isLoggedIn) return true;
 
-  final result = await Navigator.of(context).push<bool>(
-    MaterialPageRoute(builder: (_) => const LoginScreen()),
-  );
+  final result = await Navigator.of(context)
+      .push<bool>(MaterialPageRoute(builder: (_) => const LoginScreen()));
   return result ?? false;
 }
 
@@ -18,7 +17,8 @@ Future<void> logoutWithMessage(BuildContext context) async {
   try {
     await context.read<AuthState>().logout();
   } on Exception {
-    message = 'Sesi lokal ditutup. Pencabutan token di server belum terkonfirmasi.';
+    message =
+        'Sesi lokal ditutup. Pencabutan token di server belum terkonfirmasi.';
   }
 
   if (!context.mounted) return;

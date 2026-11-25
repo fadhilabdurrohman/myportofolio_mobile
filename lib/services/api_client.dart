@@ -20,7 +20,7 @@ class ApiException implements Exception {
 
 class ApiClient {
   ApiClient({http.Client? client, this.baseUrl = apiBaseUrl})
-      : _client = client ?? http.Client();
+    : _client = client ?? http.Client();
 
   final http.Client _client;
   final String baseUrl;
@@ -38,11 +38,13 @@ class ApiClient {
     try {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       if (body is Map<String, dynamic> && body.isNotEmpty) {
-        message = body.entries.map((entry) {
-          final value = entry.value;
-          final detail = value is List ? value.join(' ') : value.toString();
-          return '${entry.key}: $detail';
-        }).join('\n');
+        message = body.entries
+            .map((entry) {
+              final value = entry.value;
+              final detail = value is List ? value.join(' ') : value.toString();
+              return '${entry.key}: $detail';
+            })
+            .join('\n');
       }
     } on FormatException {
       // Sebagian kegagalan server mengembalikan HTML.
@@ -50,50 +52,48 @@ class ApiClient {
     throw ApiException(response.statusCode, message);
   }
 
-  Future<List<T>> _list<T>(
-    String path,
-    T Function(JsonMap) fromJson,
-  ) async {
-    final response = await _client.get(
-      _uri(path),
-      headers: {'Accept': 'application/json'},
-    ).timeout(_timeout);
+  Future<List<T>> _list<T>(String path, T Function(JsonMap) fromJson) async {
+    final response = await _client
+        .get(_uri(path), headers: {'Accept': 'application/json'})
+        .timeout(_timeout);
 
     _check(response, 200);
     final rows = jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
     return rows.map((row) => fromJson(row as JsonMap)).toList();
   }
 
-  Future<http.Response> _post(
-    String path, {
-    JsonMap? body,
-    String? token,
-  }) {
-    return _client.post(
-      _uri(path),
-      headers: {
-        'Accept': 'application/json',
-        if (body != null) 'Content-Type': 'application/json; charset=utf-8',
-        if (token != null) 'Authorization': 'Token $token',
-      },
-      body: body == null ? null : jsonEncode(body),
-    ).timeout(_timeout);
+  Future<http.Response> _post(String path, {JsonMap? body, String? token}) {
+    return _client
+        .post(
+          _uri(path),
+          headers: {
+            'Accept': 'application/json',
+            if (body != null) 'Content-Type': 'application/json; charset=utf-8',
+            if (token != null) 'Authorization': 'Token $token',
+          },
+          body: body == null ? null : jsonEncode(body),
+        )
+        .timeout(_timeout);
   }
 
-  Future<List<Project>> getProjects() =>
-      _list('projects/', Project.fromJson);
+  Future<List<Project>> getProjects() => _list('projects/', Project.fromJson);
 
   Future<List<Experience>> getExperiences() =>
       _list('experiences/', Experience.fromJson);
 
-  Future<Project> createProject(Project project, {required String token}) async {
+  Future<Project> createProject(
+    Project project, {
+    required String token,
+  }) async {
     final response = await _post(
       'projects/',
       body: project.toJson(),
       token: token,
     );
     _check(response, 201);
-    return Project.fromJson(jsonDecode(utf8.decode(response.bodyBytes)) as JsonMap);
+    return Project.fromJson(
+      jsonDecode(utf8.decode(response.bodyBytes)) as JsonMap,
+    );
   }
 
   Future<Experience> createExperience(
